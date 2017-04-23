@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+        Blog
+    {% endblock %}</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <script src="../static/js/jquery-3.2.0.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+
+</head>
+<body>
+{% macro render_pagination(pagination) %}
+    <nav>
+        <ul class="pagination">
+            {% if pagination.has_prev %}
+                <li>
+                    <a href="{{ url_for('home',page=pagination.prev().page) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in pagination.iter_pages() %}
+                {% if page %}
+                    {% if page!=pagination.page %}
+                        <li>
+                            <a href="{{ url_for('home',page=page) }}">
+                                {{ page }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li><a href="">{{ page }}</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="">...</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if pagination.has_next %}
+                <li>
+                    <a href="{{ url_for('home',page=pagination.next().page) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endmacro %}
+<div class="container">
+
+    <h1><a href="{{ url_for('home') }}">Blog.</a></h1>
+
+    <p>Welcome to the blog!</p>
+
+    {% block body %}
+
+    {% endblock %}
+
+</div>
+
+</body>
+</html>
