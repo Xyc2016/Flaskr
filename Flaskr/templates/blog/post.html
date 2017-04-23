@@ -1,5 +1,5 @@
 {% extends 'blog/base.html' %}
-
+{% import 'blog/base.html' as base %}
 {% block body %}
     <div class="col-lg-12">
 
@@ -55,14 +55,10 @@
             </div>
             <input type="submit" class="btn btn-primary" value="Add Comment">
         </form>
-        <h1>Recent:</h1>
-        {% for w in recent %}
-            <a href="{{ url_for('.post',post_id=w.id) }}">
-                {{ w.title }}
-            </a>
-            <br>
-        {% endfor %}
-        <br>
+
+        {{ base.recent_post_list(recent) }}
+
+
         <h1>Tags:</h1>
         {% for tag in tags %}
             <a href="{{ url_for('.tag',tag_name=tag.title) }}">{{ tag.title }}</a>

@@ -1,8 +1,8 @@
 {% extends 'blog/base.html' %}
+{% import 'blog/base.html' as base %}
 {% block title %}
     Home
 {% endblock %}
-{% import 'blog/base.html' as base %}
 {% block body %}
     <div class="row">
         <div class="col-lg-9">
@@ -24,24 +24,8 @@
             {% endfor %}
         </div>
         <div class="col-lg-3">
-            <div class="row">
-                <h5>Recent Posts</h5>
-                <ul>
-                    {% for post in recent %}
-                        <li><a href="{{ url_for('.post',post_id=post.id) }}">{{ post.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Popular Tags</h5>
-                <ul>
-                    {% for tag in top_tags %}
-                        <li><a href="{{ url_for('.tag',tag_name=tag[0].title) }}">
-                            {{ tag[0].title }}
-                        </a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {{ base.recent_post_list(recent) }}
+            {{ base.popular_tags_list(top_tags) }}
         </div>
     </div>
     {{ base.render_pagination(posts) }}

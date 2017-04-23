@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}
-        Blog
-    {% endblock %}</title>
-    <link rel="stylesheet" href="../../static/css/bootstrap.css">
-    <script src="../../static/js/jquery-3.2.0.js"></script>
-    <script src="../../static/js/bootstrap.js"></script>
-
+    <title>{% block title %}Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-3.2.0.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
 </head>
 <body>
 {% macro render_pagination(pagination) %}
@@ -46,6 +43,32 @@
         </ul>
     </nav>
 {% endmacro %}
+
+
+{% macro recent_post_list(recent) %}
+    <div class="row">
+        <h5>Recent Posts</h5>
+        <ul>
+            {% for post in recent %}
+                <li><a href="{{ url_for('.post',post_id=post.id) }}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro popular_tags_list(top_tags) %}
+            <div class="row">
+                <h5>Popular Tags</h5>
+                <ul>
+                    {% for tag in top_tags %}
+                        <li><a href="{{ url_for('.tag',tag_name=tag[0].title) }}">
+                            {{ tag[0].title }}
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+{% endmacro %}
+
 <div class="container">
 
     <h1><a href="{{ url_for('.home') }}">Blog.</a></h1>
