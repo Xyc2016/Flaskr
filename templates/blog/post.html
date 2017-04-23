@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 
 {% block body %}
     <div class="col-lg-12">
@@ -29,7 +29,7 @@
         {% endfor %}
 
         <h3>New Commit:</h3>
-        <form action="{{ url_for('post',post_id=post.id) }}" method="post">
+        <form action="{{ url_for('.post',post_id=post.id) }}" method="post">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.name.label }}
@@ -57,7 +57,7 @@
         </form>
         <h1>Recent:</h1>
         {% for w in recent %}
-            <a href="{{ url_for('post',post_id=w.id) }}">
+            <a href="{{ url_for('.post',post_id=w.id) }}">
                 {{ w.title }}
             </a>
             <br>
@@ -65,7 +65,7 @@
         <br>
         <h1>Tags:</h1>
         {% for tag in tags %}
-            {{ tag.title }}
+            <a href="{{ url_for('.tag',tag_name=tag.title) }}">{{ tag.title }}</a>
             <br>
         {% endfor %}
         <br>

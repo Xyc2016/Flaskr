@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 {% block title %}
     Home
 {% endblock %}
-{% import 'base.html' as base %}
+{% import 'blog/base.html' as base %}
 {% block body %}
     <div class="row">
         <div class="col-lg-9">
@@ -18,7 +18,7 @@
                             {{ post.text|truncate(255) }}
                         {% endif %}
 
-                        <a href="{{ url_for('post',post_id=post.id) }}">Read More</a>
+                        <a href="{{ url_for('.post',post_id=post.id) }}">Read More</a>
                     </div>
                 </div>
             {% endfor %}
@@ -28,7 +28,7 @@
                 <h5>Recent Posts</h5>
                 <ul>
                     {% for post in recent %}
-                        <li><a href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}</a></li>
+                        <li><a href="{{ url_for('.post',post_id=post.id) }}">{{ post.title }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -36,7 +36,7 @@
                 <h5>Popular Tags</h5>
                 <ul>
                     {% for tag in top_tags %}
-                        <li><a href="{{ url_for('tag',tag_name=tag[0].title) }}">
+                        <li><a href="{{ url_for('.tag',tag_name=tag[0].title) }}">
                             {{ tag[0].title }}
                         </a></li>
                     {% endfor %}

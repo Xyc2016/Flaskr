@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 {% block title %}
     Tag:{{ tag.title }}
 {% endblock %}
@@ -7,16 +7,19 @@
     {% for post in posts %}
         {{ post.title }}
         {{ post.text|truncate(100) }}
+
+        <a href="{{ url_for('.post',post_id=post.id) }}">Read More</a>
         <br>
-        <a href="{{ url_for('post',post_id=post.id) }}">Read More</a>
     {% endfor %}
     <h1>Recent:</h1>
     {% for post in recent %}
-        <a href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}</a>
+        <a href="{{ url_for('.post',post_id=post.id) }}">{{ post.title }}</a>
+        <br>
     {% endfor %}
     <h1>Popular Tags:</h1>
     {% for tag in top_tags %}
-        <a href="{{ url_for('tag',tag_name=tag.title) }}">{{ tag[0].title }}</a>
+        <a href="{{ url_for('.tag',tag_name=tag.title) }}">{{ tag[0].title }}</a>
+        <br>
     {% endfor %}
 
 

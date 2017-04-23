@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, flash, request
+from flask import Flask, render_template, jsonify, flash, request, Blueprint, redirect, url_for
 from config import DevConfig
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -20,6 +20,7 @@ app = Flask(__name__)
 app.config.from_object(DevConfig)
 db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
+blog_blueprint = Blueprint('blog', __name__, template_folder='templates/blog', url_prefix='/blog')
 
 
 class User(db.Model):
@@ -105,7 +106,12 @@ def sidebar_data():
 
 
 @app.route('/')
-@app.route('/<int:page>')
+def index():
+    return redirect(url_for('blog.home'))
+
+
+@blog_blueprint.route('/')
+@blog_blueprint.route('/<int:page>')
 def home(page=1):
     posts = Post.query.order_by(
         Post.date.desc()
@@ -113,14 +119,14 @@ def home(page=1):
 
     recent, top_tags = sidebar_data()
     return render_template(
-        'index.html',
+        'blog/index.html',
         posts=posts,
         recent=recent,
         top_tags=top_tags
     )
 
 
-@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
+@blog_blueprint.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id):
     form = CommentForm()
     if form.validate_on_submit():
@@ -137,7 +143,7 @@ def post(post_id):
     recent, top_tags = sidebar_data()
 
     return render_template(
-        'post.html',
+        'blog/post.html',
         post=the_post,
         tags=tags,
         comments=comments,
@@ -147,13 +153,13 @@ def post(post_id):
     )
 
 
-@app.route('/tag/<string:tag_name>')
+@blog_blueprint.route('/tag/<string:tag_name>')
 def tag(tag_name):
     the_tag = Tag.query.filter_by(title=tag_name).first_or_404()
     posts = the_tag.posts.order_by(Post.date.desc()).all()
     recent, top_tags = sidebar_data()
     return render_template(
-        'tag.html',
+        'blog/tag.html',
         tag=the_tag,
         posts=posts,
         recent=recent,
@@ -161,7 +167,7 @@ def tag(tag_name):
     )
 
 
-@app.route('/user/<string:username>')
+@blog_blueprint.route('/user/<string:username>')
 def user(username):
     the_user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.date.desc()).all()
@@ -175,5 +181,6 @@ def user(username):
     )
 
 
+app.register_blueprint(blog_blueprint)
 if __name__ == '__main__':
     app.run()
